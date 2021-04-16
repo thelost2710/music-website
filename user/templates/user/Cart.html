@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	{% include 'user/toolbarUser.html' %}
+	<div class="container">
+		<div class="row">
+			<div class="col-12">
+				<h2 style="color: white;">Your cart</h2>
+			</div>
+			<div class="col-12">
+				<div class="row">
+					{% for i in cart%}
+					<div class="col-12" style="border: 1px solid white; margin-top: 15px; color: white;">
+						<div class="row">
+							<div class="col-4">
+								<a href="/viewMusicInAlbum/{{i.3}}" title="">
+									<img src="/media/{{i.2}}" alt="" style="width: 100%; height: auto;">
+								</a>
+							</div>
+							<div class="col-6" style=" margin-top: 10px;">
+								<a href="/viewMusicInAlbum/{{i.3}}" title="" style="color: white;">
+									<div>Name album: {{i.0}}</div>
+									<div>
+										Number of likes: {{i.4}}
+									</div>
+									<div>
+										Price: <span id="price{{i.1}}">{{i.1}}$</span>
+									</div>
+								</a>
+							</div>
+							<div class="col-2" style="align-items: center;justify-content: center;display: flex;">
+								<input type="checkbox" name="" style="width: 24px; height: 24px;" onclick="setPrice('{{i.1}}', '{{i.3}}')" id="setPrice{{i.3}}">
+								<i class="material-icons" style="font-size:36px; margin-left: 10px; cursor: pointer;" onclick="deleteCart('{{i.3}}')">delete</i>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'user/footerCart.html' %}
+</body>
+<script>
+	function deleteCart(id)
+	{
+		if (confirm("Do you want to delete this album")) {
+			location.href = "/deleteCart/"+ id;
+		} else {
+
+		}
+	}
+</script>
+<script>
+	var totalPrice = 0;
+	numberAlbum = []
+	function setPrice(price, id)
+	{
+		if(document.getElementById('setPrice'+id).checked == true)
+		{
+			totalPrice = parseInt(totalPrice) + parseInt(price);
+			numberAlbum.push(id);
+		}
+		else
+		{
+			totalPrice = parseInt(totalPrice) - parseInt(price);
+			const index = numberAlbum.indexOf(id);
+			if (index > -1) {
+				numberAlbum.splice(index, 1);
+			}
+		}
+		document.getElementById("totalPrice").innerHTML = totalPrice + "$";
+	}
+</script>
+<script>
+	function buyAlbum()
+	{	
+		if(parseInt(document.getElementById("totalPrice").innerHTML) > 0)
+		{
+			var albumID = {albumID: numberAlbum};
+			location.href = "/bill/"+totalPrice+"?"+$.param(albumID);
+		}
+		else
+		{
+			alert("Please select the album you want to buy");
+		}
+	}
+</script>
+</html>

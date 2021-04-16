@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<title></title>
+	<style>
+		hr{
+			width: 100%;
+			height: 1px;
+			background-color: #dcdde1;
+		}
+		body{
+			background-color: #21181D !important;
+			color: white !important;
+		}
+		.card{
+			background-color: transparent !important;
+		}
+		.parent {
+			width: 100%;
+			height: 170px;
+			overflow: hidden;
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.child {
+			height: 100%;
+			width: 100%;
+			background-size: cover;
+			background-repeat: no-repeat;
+			-webkit-transition: all .5s;
+			-moz-transition: all .5s;
+			-o-transition: all .5s;
+			transition: all .5s;
+		}
+		.play {
+			display: none;
+			font-size: 35px;
+			color: #ffffff !important;
+			font-family: sans-serif;
+			text-align: center;
+			margin: auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 50px;
+			cursor: pointer;
+			/*text-decoration: none;*/
+		}
+
+		.parent:hover .child, .parent:focus .child {
+			-ms-transform: scale(1.2);
+			-moz-transform: scale(1.2);
+			-webkit-transform: scale(1.2);
+			-o-transform: scale(1.2);
+			transform: scale(1.2);
+		}
+
+		.parent:hover .child:before, .parent:focus .child:before {
+			display: block;
+		}
+
+		.parent:hover a, .parent:focus a {
+			display: block;
+		}
+
+		.child:before {
+			display: none;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(52,73,94,0.75);
+		}
+
+		/* Media Queries */
+		@media screen and (max-width: 960px) {
+			.parent {width: 100%; margin: 20px 0px}
+			.wrapper {padding: 20px 20px;}
+		}
+		.information{
+			color: white;
+			margin-top: 20px;
+		}
+
+
+
+		.hello {display: none}
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	{% include "Search.html" %}
+	<div class="container">
+		<div class="row" style="margin-top: 20px; margin-bottom: 70px;">
+			<div class="col-12">
+				<a href="/ViewHotAlbum" title=""><h5 style="color: white;">Hot album >>></h5></a>
+			</div>
+			{% for i in hotAlbum%}
+			<div class="col-xl-3 col-12">
+				<div class="card" style="width: 100%;">
+					<div class="parent" onclick="">
+						<div class="child" style="background-image: url(/media/{{i.Image}}); background-position: center;">
+							<a href="/viewMusicInAlbum/{{i.id}}" class="play"><i class="fa fa-play" style="font-size:48px;color:white"></i></a>
+						</div>
+					</div>
+					<div class="">
+						<h5 class="card-title">{{i.Name}}</h5>
+					</div>
+				</div>
+			</div>
+			{%endfor%}
+		</div>
+		<div class="row" style="margin-bottom: 80px;">
+			<div class="col-12">
+				<a href="/NewAlbum" title=""><h5 style="color: white;">New album >>></h5></a>
+			</div>
+			{% for i in newAlbum%}
+			<div class="col-xl-3 col-12">
+				<div class="card" style="width: 100%;">
+					<div class="parent" onclick="">
+						<div class="child" style="background-image: url(/media/{{i.Image}}); background-position: center;">
+							<a href="/viewMusicInAlbum/{{i.id}}" class="play"><i class="fa fa-play" style="font-size:48px;color:white"></i></a>
+						</div>
+					</div>
+					<div class="">
+						<h5 class="card-title">{{i.Name}}</h5>
+					</div>
+				</div>
+			</div>
+			{%endfor%}
+		</div>
+	</div>
+</div>
+{% include 'footerContact.html' %}
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+		.anh{
+			margin-top: 100px;
+
+		}
+		p{
+			color: white;	
+		}
+		h1{
+			color: white;
+		}
+		.content{
+			margin-top: 30px;
+		}
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	{% include "Search.html" %}
+	<div class="container-xl" style="margin-bottom: 300px;">
+		<div class="row anh">
+			<h1 class="col-12" style="margin-bottom: 30px;font-size:70px;">Contact</h1>
+			<div class="col-xl-3 col-12 1 content" style="text-align: center;">
+				<div style="color: #EE5C57;">
+					<h3>ADDRESS</h3>
+					<p></p>
+				</div>
+				<p>1450 Pennsylvania Avenue NW, Washington, DC 20230, USA</p>
+			</div>
+			<div class="col-xl-3 col-12 2 content" style="text-align: center;">
+				<div style="color: #EE5C57;">
+					<h3>HOTLINE</h3>
+				</div>
+				<p>Hotline: 19001221</p>
+				<p>Phone number: 037711000</p>
+			</div>	
+			<div class="col-xl-3 col-12 3 content" style="text-align: center;">
+				<div style="color: #EE5C57;">
+					<h3>EMAIL/FAX</h3>
+				</div>
+				<p>Email: cskh@hotro.shopee.vn</p>
+				<p>Email: tutagch17593@fpt.edu</p>
+			</div>
+			<div class="col-xl-3 col-12 4 content" style="text-align: center;">
+				<div style="color: #EE5C57;">
+					<h3>BUSINESS CODE</h3>
+				</div>
+				<p>Business Code: 114441 issued by the City of Washington on March 6, 2021.</p>
+			</div>			
+		</div>
+
+	</div>
+	{% include 'footerContact.html' %}
+</body>
+</html>

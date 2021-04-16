@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<title></title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- <script src= "https://cdn.jsdelivr.net/npm/html2canvas@1.0.0-rc.5/dist/html2canvas.min.js"></script>  -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.1/html2canvas.js"></script>
+	<style>
+
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	<form action="/saveBill?albumID={{albumID}}" method="POST" accept-charset="utf-8">
+		{% csrf_token %}
+		<input type="" name="image" id="Image" style="display: none;">
+		<div class="container-xl" id="photo">
+			<div class="row">
+				<div class="col-12" style="margin-top: 20px;">
+					<h3>Please fill out all information to proceed with the purchase</h3>
+				</div>
+				<div class="col-12 col-xl-6">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Name of consignee</label>
+						<input type="text" class="form-control" aria-describedby="emailHelp" required name="Name" id="Name">
+						<p id="nameValidation" style="color: red; display: none;">Your name must be greater than 5 characters</p>
+					</div>
+				</div>
+				<div class="col-12 col-xl-6">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Address</label>
+						<input type="text" class="form-control" aria-describedby="emailHelp" required name="Address" id="Address">
+						<p id="addressValidation" style="color: red; display: none;">Your address must be greater than 5 characters</p>
+					</div>
+				</div>
+				<div class="col-12 col-xl-6">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Phone number</label>
+						<input type="text" class="form-control" aria-describedby="emailHelp" required name="Phone" id="Phone">
+						<p id="phoneValidation" style="color: red; display: none;">Your phone must be greater than 5 characters</p>
+					</div>
+				</div>
+				<div class="col-12 col-xl-6">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Email</label>
+						<input type="email" class="form-control" aria-describedby="emailHelp" required name="Email" id="Email">
+						<p id="emailValidation" style="color: red; display: none;">Your email must be greater than 5 characters</p>
+					</div>
+				</div>
+			</div>
+			<div style="display: none;">
+				{% for i in album%}
+				<input type="text" name="Album" value="{{i.0.id}}"> 
+				{% endfor %}
+			</div>
+			<div class="row">
+				{% for i in album%}
+				<div class="col-12" style="border: 1px solid gray; margin-top: 15px;">
+					<div class="row">
+						<div class="col-4">
+							<img src="/media/{{i.0.Image}}" alt="" style="width: 100%; height: auto;">
+						</div>
+						<div class="col-8" style="border-left: 1px solid gray">						
+							<div>Name album: {{i.0.Name}}</div>
+							<div>
+								Number of likes: {{i.0.Like}}
+							</div>
+							<div>
+								Price: <span>{{i.0.Price}}$</span>
+							</div>
+							<div>
+								CD extra fee: 
+								{% if i.0.UserID_id == None %}
+								<span class="CD_extra_fee">0</span><span>$</span>
+								{% endif %}
+								{% if i.0.UserID_id != None %}
+								<span class="CD_extra_fee">5</span><span>$</span>
+								{% endif %}
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endfor %}
+				<div class="col-12">
+					<div style="font-weight: bold;"><span>Total price:</span><span id="totalPrice"></span></div>
+				</div>
+				<script>
+					var CD_extra_fee = document.getElementsByClassName("CD_extra_fee")
+					var totalPrice = "{{totalPrice}}"
+					totalPrice = parseInt(totalPrice);
+					for(var i = 0; i < CD_extra_fee.length; i++)
+					{
+						totalPrice = totalPrice + parseInt(CD_extra_fee[i].innerHTML);
+					}
+					document.getElementById("totalPrice").innerHTML = totalPrice + "$"
+				</script>
+			</div>
+		</div>
+		<div class="container-xl">
+			<div class="row">
+				<div class="col-12" id="output" style="display: none;">
+				</div>
+			</div>
+			<div class="row" style="margin-top: 20px;width: 100%; text-align: center;">
+				<div class="col-12">
+					<button type="button" class="btn btn-danger" id="takeshotID">Confirm information</button>
+				</div>
+				<div class="col-12">
+					<button type="submit" class="btn btn-danger" id="run" style="display: none;">buy</button>
+				</div>
+			</div>
+			<div class="row" style="margin-top: 20px;width: 100%; text-align: center;">
+				<div class="col-12">
+					<button type="button" class="btn btn-warning" style="display: none;" id="buyNowID"  data-toggle="modal" data-target="#exampleModal">Buy now</button>
+				</div>
+			</div>
+
+			<!-- Modal -->
+			<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h5 class="modal-title" id="exampleModalLabel">Thank you</h5>
+<!-- 							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button> -->
+						</div>
+						<div class="modal-body">
+							Thank you for trusting us
+						</div>
+						<div class="modal-footer">
+							<!-- 							<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
+							<button type="button" class="btn btn-primary" onclick="buyNow()">Ok</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</form>
+
+</body>
+<!-- <script type="text/javascript"> 
+	function takeshot() { 
+		var validation = 0;
+		var Name = $("#Name").val();
+		var Address = $("#Address").val();
+		var Phone = $("#Phone").val();
+		var Email = $("#Email").val();
+		if(Name.length > 5)
+		{
+			$("#nameValidation").hide();
+			validation = 0;
+		}
+		if(Address.length > 5)
+		{
+			$("#addressValidation").hide();
+			validation = 0;
+		}
+		if(Phone.length > 5)
+		{
+			$("#phoneValidation").hide();
+			validation = 0;
+		}
+		if(Email.length > 5)
+		{
+			$("#emailValidation").hide();
+			validation = 0;
+		}
+		if(Name.length <= 5)
+		{
+			$("#nameValidation").show();
+			validation++;
+		}
+		if(Address.length <= 5)
+		{
+			$("#addressValidation").show();
+			validation++;
+		}
+		if(Phone.length <= 5)
+		{
+			$("#phoneValidation").show();
+			validation++;
+		}
+		if(Email.length <= 5)
+		{
+			$("#emailValidation").show();
+			validation++;
+		}
+
+		if(validation == 0)
+		{
+			let div = 
+			document.getElementById('photo'); 
+			html2canvas(div).then( 
+				function (canvas) { 
+					document.getElementById('output').appendChild(canvas); 
+				}) 
+			document.getElementById('photo').remove();
+			document.getElementById('takeshotID').style.display = "none";
+			document.getElementById('buyNowID').style.display = "unset";
+		}
+
+	} 
+	function buyNow()
+	{
+		var img = document.getElementById('output');
+		img = img.getElementsByTagName("canvas")[0].toDataURL()
+		document.getElementById('Image').value = img;
+		run();
+	}
+	function run() {
+		document.getElementById("run").click();
+	}
+</script>  -->
+<script>
+	$(document).ready(function(){
+var element = $("#photo"); // global variable
+var getCanvas; // global variable
+
+$("#takeshotID").on('click', function () {
+	var validation = 0;
+	var Name = $("#Name").val();
+	var Address = $("#Address").val();
+	var Phone = $("#Phone").val();
+	var Email = $("#Email").val();
+	if(Name.length > 5)
+	{
+		$("#nameValidation").hide();
+		validation = 0;
+	}
+	if(Address.length > 5)
+	{
+		$("#addressValidation").hide();
+		validation = 0;
+	}
+	if(Phone.length > 5)
+	{
+		$("#phoneValidation").hide();
+		validation = 0;
+	}
+	if(Email.length > 5)
+	{
+		$("#emailValidation").hide();
+		validation = 0;
+	}
+	if(Name.length <= 5)
+	{
+		$("#nameValidation").show();
+		validation++;
+	}
+	if(Address.length <= 5)
+	{
+		$("#addressValidation").show();
+		validation++;
+	}
+	if(Phone.length <= 5)
+	{
+		$("#phoneValidation").show();
+		validation++;
+	}
+	if(Email.length <= 5)
+	{
+		$("#emailValidation").show();
+		validation++;
+	}
+	if(validation == 0)
+	{
+		html2canvas(element, {
+			onrendered: function (canvas) {
+				$("#output").append(canvas);
+				getCanvas = canvas;
+			}
+		});
+		/*document.getElementById('photo').remove();*/
+		document.getElementById('takeshotID').style.display = "none";
+		document.getElementById('buyNowID').style.display = "unset";
+
+	}
+});
+});
+	function buyNow()
+	{
+		/*document.getElementById('photo').remove();*/
+		var img = document.getElementById('output');
+		img = img.getElementsByTagName("canvas")[0].toDataURL()
+		document.getElementById('Image').value = img;
+		run();
+	}
+	function run() {
+		document.getElementById("run").click();
+	}
+
+</script>
+</html>

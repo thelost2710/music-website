@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+		/* Global Styling */
+		html, body {margin:0px; padding: 0px;}
+		label{
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	{% include "Search.html" %}
+	<form action="/createAlbum" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
+		{% csrf_token %}
+		<div class="container-xl">
+			<div class="row">
+				<div class="col-12">
+					<input type="text" name="page" value="{{page}}" style="display: none;">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Name album</label>
+						<input type="text" class="form-control" aria-describedby="emailHelp" required name="Name">
+					</div>
+				</div>
+				<div class="col-12">
+					<div class="form-group">
+						<label for="exampleInputEmail1">Description</label>
+						<textarea class="form-control" rows="3" required name="Description"></textarea>
+					</div>
+				</div>
+				<div class="col-12">
+					<input type="file" style="color: white;" required name="ImageAlbum">
+				</div>
+				<div class="col-12" style="width: 100%; text-align: center; margin-top: 30px;">
+					<button type="submit" class="btn btn-light">Create album</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</body>
+<script>
+</script>
+</html>

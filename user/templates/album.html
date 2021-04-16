@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<style>
+		hr{
+			width: 100%;
+			height: 1px;
+			background-color: #dcdde1;
+		}
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+		/* Global Styling */
+		html, body {margin:0px; padding: 0px;}
+
+
+		#logo {height: 80px; margin-left: 20px;}
+
+		.wrapper {
+			padding: 50px 50px;
+			max-width: 1200px;
+			text-align: center;
+			margin-left: auto;
+			margin-right: auto;
+			margin-top: 80px;
+		}
+
+		.right {float: right !important;}
+		/* Image zoom on hover + Overlay colour */
+		.parent {
+			width: 100%;
+			height: 170px;
+			overflow: hidden;
+			position: relative;
+			display: inline-block;
+			cursor: pointer;
+		}
+
+		.child {
+			height: 100%;
+			width: 100%;
+			background-size: cover;
+			background-repeat: no-repeat;
+			-webkit-transition: all .5s;
+			-moz-transition: all .5s;
+			-o-transition: all .5s;
+			transition: all .5s;
+		}
+		.play {
+			display: none;
+			font-size: 35px;
+			color: #ffffff !important;
+			font-family: sans-serif;
+			text-align: center;
+			margin: auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			bottom: 0;
+			right: 0;
+			height: 50px;
+			cursor: pointer;
+			/*text-decoration: none;*/
+		}
+
+		.parent:hover .child, .parent:focus .child {
+			-ms-transform: scale(1.2);
+			-moz-transform: scale(1.2);
+			-webkit-transform: scale(1.2);
+			-o-transform: scale(1.2);
+			transform: scale(1.2);
+		}
+
+		.parent:hover .child:before, .parent:focus .child:before {
+			display: block;
+		}
+
+		.parent:hover a, .parent:focus a {
+			display: block;
+		}
+
+		.child:before {
+			display: none;
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			top: 0;
+			left: 0;
+			background-color: rgba(52,73,94,0.75);
+		}
+
+		/* Media Queries */
+		@media screen and (max-width: 960px) {
+			.parent {width: 100%; margin: 20px 0px}
+			.wrapper {padding: 20px 20px;}
+		}
+		.information{
+			color: white;
+			margin-top: 20px;
+		}
+
+
+
+		.hello {display: none}
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	{% include "Search.html" %}
+	<div class="container-xl" style="margin-bottom: 100px;">
+		<div class="row">
+			<div class="col-12">
+				<h3 style="color:#1abc9c;margin-top: 60px;">{{title}}</h3>
+			</div>
+			{% for i in album%}
+			<div class="col-xl-3 col-12">
+				<div class="row information">
+					<div class="col-12">
+						<div class="row">
+							<div class="col-3">
+								
+							</div>
+							<div class="col-3">
+								{% if i.UserID_id != None %}
+								<i class="material-icons" style="font-size:36px; cursor: pointer;" onclick="deleteYourAlbum('{{i.id}}')">delete</i>
+								{% endif %}
+							</div>
+							<div class="col-3">
+								<i class="fa fa-shopping-cart" style="font-size:36px;color:white; cursor: pointer;" onclick="buyAlbum('cart{{i.id}}')" data-toggle="modal" data-target="#exampleModal"></i>
+							</div>
+							<div class="col-3">
+								<i class="fa fa-heart-o" style="font-size:36px;cursor: pointer;" id="like{{i.id}}" onclick="like(id)"></i>
+								<i class="fa fa-heart" style="font-size:36px; color: white; cursor: pointer; display: none;" id="unlike{{i.id}}" onclick="unLike(id)"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="parent" onclick="">
+					<div class="child" style="background-image: url(/media/{{i.Image}}); background-position: center;">
+						<a href="/viewMusicInAlbum/{{i.id}}" class="play"><i class="fa fa-play" style="font-size:48px;color:white"></i></a>
+					</div>
+				</div>
+				<div class="col-12" style="color: white;">
+					<div class="row">
+						<div class="col-12">
+							Name: {{i.Name}}
+						</div>
+						<div class="col-12">
+							Buy album: {{i.Price}}$
+						</div>
+					</div>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+	</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div style="width: 100%; text-align: right;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: 10px;">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="width: 100%; text-align: center; color: #27ae60;margin-bottom: 15px;">
+					Add album to cart successfully
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'footerContact.html' %}
+</body>
+<script>
+	function deleteYourAlbum(id)
+	{
+		if (confirm("Do you want to delete this album")) {
+			var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+			var xhttp = new XMLHttpRequest();
+			xhttp.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					if(this.responseText == "Delete")
+					{
+						location.href = "/YourAlbum"
+					}
+				}
+			};
+			xhttp.open("GET", "/deleteYourAlbum/"+id, true);
+			xhttp.send();
+		} else {
+
+		}
+	}
+	function buyAlbum(id)
+	{
+		var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					location.href = "/login?page="+location.href;
+				}
+			}
+		};
+		xhttp.open("GET", "/addCart/"+splitID[1], true);
+		xhttp.send();
+	}
+</script>
+<script>
+	/*shows the song status icon when reloading the page*/
+	{% for i in rate_album%}
+	console.log("{{i.AlbumID_id}}")
+	$("#unlike{{i.AlbumID_id}}").show();
+	$("#like{{i.AlbumID_id}}").hide();
+	{% endfor %}
+</script>
+<script>
+	function like(id)
+	{
+		var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+		$("#"+id).hide();
+		$("#unlike"+splitID[1]).show();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					location.href = "/login?page="+location.href;
+				}
+			}
+		};
+		xhttp.open("GET", "/LikeAlbum/"+splitID[1], true);
+		xhttp.send();
+	}
+	function unLike(id)
+	{
+		var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+		$("#"+id).hide();
+		$("#like"+splitID[1]).show();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					location.href = "/login?page="+location.href;
+				}
+			}
+		};
+		xhttp.open("GET", "/LikeAlbum/"+splitID[1], true);
+		xhttp.send();
+	}
+</script>
+</html>

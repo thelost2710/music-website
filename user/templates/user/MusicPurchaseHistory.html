@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+		th, td{
+			color: white;
+		}
+		.shiper{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	{% include 'user/toolbarUser.html' %}
+	{% include "Search.html" %}
+	<div class="container" style="color:white;">
+		<h2>Your purchase history</h2>           
+		<table class="table table-striped">
+			<thead>
+				<tr style="text-align: center;">
+					<th>Date of purchase</th>
+					<th>Shipped</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for i in MusicPurchaseHistory %}
+				<tr>
+					<td><a href="media/{{i.Bill}}" title="" style="color:white;">{{i.Date}}</a></td>
+					<td class="shiper">
+						{% if i.Shipped == True%}
+						<i class="material-icons" style="font-size:26px; color: #3498db;">check_box</i>
+						{% endif %}
+						{% if i.Shipped == False%}
+						 <i class="material-icons" style="font-size:26px; color: #3498db;">check_box_outline_blank</i>
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor%}
+			</tbody>
+		</table>
+	</div>
+
+</body>
+</html>

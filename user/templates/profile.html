@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<title>Your profile</title>
+	<meta charset="utf-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/styleProfile.css' %}">
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white !important;
+		}
+	</style>
+</head>
+<body>
+	{% include 'user/toolbarUser.html' %}
+	<div class="container" style="text-align: center; margin-top: 50px;">
+		<div class="row">
+			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad" >
+				<div class="panel panel-info">
+					<div class="panel-heading">
+						<h2 class="panel-title">{{userInfotmation.Name}}</h2>
+					</div>
+					<div class="panel-body">
+						<form action="/saveInformation" method="POST" accept-charset="utf-8">
+							{% csrf_token %}
+							<div class="row">
+								<div class="col-12" align="center"> <img alt="User Pic" src="{% static 'image/anh1.png' %}" class="rounded-circle"> </div>
+								<div class="col-12" style="margin-top: 30px;"> 
+									<table class="table table-user-information">
+										<tbody style="color: white;">
+											<tr>
+												<td>Name</td>
+												<td><input type="text" class="form-control" value="{{userInfotmation.Name}}" name="Name" required></td>
+											</tr>
+											<tr>
+												<td>Date of Birth</td>
+												<td><input type="text" class="form-control" value="{{userInfotmation.DateofBirth}}" name="DOB" required></td>
+											</tr>					
+											<tr>
+												<td>Gender</td>
+												<td style="text-align: left;">
+													{% if userInfotmation.Gender == "Female" %}
+													<input type="radio" id="female" name="Gender" value="Female" checked="checked">
+													<label for="female">Female</label><br>
+													<input type="radio" id="other" name="Gender" value="Male">
+													<label for="Male">Male</label>
+													{% endif %}
+													{% if userInfotmation.Gender == "Male" %}
+													<input type="radio" id="female" name="Gender" value="Female">
+													<label for="female">Female</label><br>
+													<input type="radio" id="other" name="Gender" value="Male" checked="checked">
+													<label for="Male">Male</label>
+													{% endif %}
+													{% if userInfotmation.Gender != "Male" and userInfotmation.Gender != "Female"%}
+													<input type="radio" id="female" name="Gender" value="Female">
+													<label for="female">Female</label><br>
+													<input type="radio" id="other" name="Gender" value="Male">
+													<label for="Male">Male</label>
+													{% endif %}
+												</td>
+											</tr>
+											<tr>
+												<td>Home Address</td>
+												<td><textarea name="Address" class="form-control" name="Address" required>{{userInfotmation.Address}}</textarea></td>
+											</tr>
+											<tr>
+												<td>Email</td>
+												<td><input type="email" class="form-control" value="{{user.email}}" name="Email" required></td>
+											</tr>
+											<tr>
+												<td>Phone Number</td>
+												<td><input type="number" class="form-control" value="{{userInfotmation.Phone}}" name="Phone" required></td>
+											</tr>
+											<tr>
+												<td>Username</td>
+												<td><input type="text" class="form-control" value="{{user.username}}" name="Username" required></td>
+											</tr>
+<!-- 											<tr>
+												<td>Password</td>
+												<td><input type="password" class="form-control" id="password" name="Password" required></td>
+											</tr>
+											<tr>
+												<td>Confirm password</td>
+												<td><input type="password" class="form-control" id="rePassword" required></td>
+											</tr> -->
+
+
+										</tbody>
+									</table>
+								</div>
+								<div class="col-12">
+									<p style="color:white; display: none;text-align: left;" id="validatePassword">Passwords do not match</p>
+									<button class="btn btn-primary" style="width: 150px;" id="submit" type="submit">Save</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'footerContact.html' %}
+</body>
+<script>
+	$("#password").keyup(function(){
+		if($("#password").val() == $("#rePassword").val())
+		{
+			$("#validatePassword").hide()
+			$("#submit").attr("type", "submit")
+		}
+		else
+		{
+			$("#validatePassword").show()
+			$("#submit").attr("type", "button")
+		}
+	});
+	$("#rePassword").keyup(function(){
+		if($("#password").val() == $("#rePassword").val())
+		{
+			$("#validatePassword").hide()
+			$("#submit").attr("type", "submit")
+		}
+		else
+		{
+			$("#validatePassword").show()
+			$("#submit").attr("type", "button")
+		}
+	});
+
+</script>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style>
+		html { 
+			background: url({% static 'image/login/music-background.jpg' %}) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		body{
+			background-color: transparent;	
+			width: 100%;
+		}
+		.signUp
+		{
+			margin-top: 300px; 
+			color: #2c3e50;
+		}
+		@media only screen and (max-width: 1200px) {
+			.signUp
+			{
+				margin-top: 200px; 
+				color: #2c3e50;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container-fluid signUp">
+		<div class="container-xl">
+			<div class="row">
+				<div class="col-xl-3 col-12"></div>
+				<div class="col-xl-6 col-12 csignup_section">
+					<form class="needs-validation" method="POST" action="/signUp">
+						{% csrf_token %}
+						<div style="text-align: center">
+							<h1>Sign Up</h1>
+						</div>
+						<p></p>
+						<div class="form-row">
+							<input type="text" class="form-control" placeholder="Username" required name="username">
+						</div>
+						<p></p>
+						<div class="form-row">
+							<input type="email" class="form-control" placeholder="Email" required name="email">
+						</div>
+						<p></p>
+						<div class="form-row">
+							<input type="password" class="form-control" id="password" placeholder="Password" required name="password">
+						</div>
+						<p></p>
+						<div class="form-row">
+							<input type="password" class="form-control" id="rePassword" placeholder="Re-enter password" required>
+						</div>
+						<p style="color:red; display: none;" id="validatePassword">Passwords do not match</p>
+						<div style="width: 100%; text-align: center; margin-bottom: 20px; margin-top: 20px;">
+							<button type="submit" class="btn btn-primary" id="submit">SIGN UP</button>
+						</div>
+						<p id="privacyTerms" class="small_text">
+							<span>Do you already have an account? <a href="/login" title="">Click here to login</a></span>
+							<br>
+							<a>By signing up, you agree to our terms of use, privacy policy and cookie policy</a>.
+						</p>
+					</form>     
+				</div>
+				<div class="col-xl-3 col-12"></div>
+			</div>
+		</div>
+	</div>
+</body>
+<script>
+	$("#password").keyup(function(){
+		if($("#password").val() == $("#rePassword").val())
+		{
+			$("#validatePassword").hide()
+			$("#submit").attr("type", "submit")
+		}
+		else
+		{
+			$("#validatePassword").show()
+			$("#submit").attr("type", "button")
+		}
+	});
+	$("#rePassword").keyup(function(){
+		if($("#password").val() == $("#rePassword").val())
+		{
+			$("#validatePassword").hide()
+			$("#submit").attr("type", "submit")
+		}
+		else
+		{
+			$("#validatePassword").show()
+			$("#submit").attr("type", "button")
+		}
+	});
+
+</script>
+</html>

@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<style>
+		body{
+			background-color: #21181D !important;
+			color: white;
+		}
+	</style>
+</head>
+<body>
+	{% include toolbar %}
+	{% include "Search.html" %}
+	<div class="container" style="margin-bottom: 350px;">
+		<div class="row">
+			<div class="col-12">
+				<h2 style="color: white;">All song</h2>
+			</div>
+			<div class="col-12">
+				<div class="row">
+					{% for i in music%}
+					<div class="col-12" style="border: 1px solid white; margin-top: 15px; color: white;">
+						<div class="row">
+							<div class="col-2">
+								<a href="#" title="" onclick="loadMusic(id)" id="{{i.Music}}">
+									<img src="/media/{{i.Image}}" alt="" style="width: 100%; height: auto;">
+								</a>
+							</div>
+							<div class="col-8">
+								<a href="#{{i.Music}}" title="" style="color:white;" onclick="loadMusic(id)" id="{{i.Music}}">
+									<div id="Name{{i.Music}}">Name: {{i.Name}}</div>
+								</a>
+								<div>
+									Singer: {{i.Singer}}
+								</div>
+								<div>
+									Price: {{i.Price}}$
+								</div>
+								<div>
+									Like: {{i.Like}}
+								</div>
+								<div>
+									Description: {{i.Description}}
+								</div>
+								
+							</div>
+							<div class="col-2">
+								<i class="fa fa-heart-o" style="font-size:36px;cursor: pointer;" id="like{{i.id}}" onclick="like(id)"></i>
+								<i class="fa fa-heart" style="font-size:36px; color: white; cursor: pointer; display: none;" id="unlike{{i.id}}" onclick="unLike(id)"></i>
+								<i class="material-icons" style="font-size:50px; margin-top: -8px; position: absolute; cursor: pointer;" data-toggle="modal" data-target="#exampleModal" onclick="setMusic('{{i.id}}')">add</i>
+							</div>
+						</div>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div style="width: 100%; text-align: right;">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close" style="margin-right: 10px;">
+						<span aria-hidden="true" onclick="closeNotification()">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body" style="width: 100%;margin-bottom: 15px;" id="Notification">
+					<div class='row' id="successfully" style="display: none;">
+						<div class='col-12' style='text-align: center; color: #27ae60'>Add songs successfully</div>
+					</div>
+					<div class='row' id="alreadyExists" style="display: none;">
+						<div class='col-12' style='text-align: center; color: #27ae60'>The song already exists in the album</div>
+					</div>
+					<div class="row" id="removeNotification">
+						<div class="col-12" style="width: 100%; text-align: center;">
+							<h5>Your album</h5>
+						</div>
+						<div class="col-12" style="width: 100%; text-align: right; margin-bottom: 10px;">
+							<a href="#" title="">
+								<i class="material-icons" style="font-size:36px;" onclick="createAlbumInterface()">create_new_folder</i>
+							</a>
+						</div>
+						<script>
+							function createAlbumInterface()
+							{
+								location.href = "/createAlbumInterface?page="+location.href;
+							}
+						</script>
+						<div class="col-12" id="setIdMusic" style="display: none;">
+						</div>
+						{% for i in album%}
+						<div class="col-12">
+							<div class="row">
+								<div class="col-10" style="justify-content: center;align-items: center;display: flex;">
+									{{i.Name}}
+								</div>
+								<div class="col-2">
+									<i class="fa fa-check-circle-o" style="font-size:36px; color: red; cursor: pointer;" onclick="addMusic('{{i.id}}')"></i>
+								</div>
+							</div>
+						</div>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+{% include 'footerContact.html' %}
+{% include "footer.html" %}
+<script>
+	/*shows the song status icon when reloading the page*/
+	{% for i in rate_music%}
+	console.log("{{i.Music_ID.id}}")
+	$("#unlike{{i.Music_ID.id}}").show();
+	$("#like{{i.Music_ID.id}}").hide();
+	{% endfor %}
+</script>
+<script>
+	function closeNotification(){
+		document.getElementById('removeNotification').style.display = "block"
+		document.getElementById('successfully').style.display = "none"
+		document.getElementById('alreadyExists').style.display = "none"
+	}
+	function setMusic(id)
+	{
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					console.log("aaaaaaaa")
+					location.href = "/login?page="+location.href;
+				}
+				if(this.responseText == "Logged")
+				{
+					document.getElementById('setIdMusic').innerHTML = id;
+				}
+			}
+		};
+		xhttp.open("GET", "/CheckLogin", true);
+		xhttp.send();
+	}
+	function addMusic(id)
+	{
+		var idMusic = document.getElementById('setIdMusic').innerHTML;
+		var idAlbum = id;
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Add songs successfully")
+				{
+					document.getElementById('removeNotification').style.display = "none"
+					document.getElementById('successfully').style.display = "block"
+
+				}
+				if(this.responseText == "The song already exists in the album")
+				{
+					document.getElementById('removeNotification').style.display = "none"
+					document.getElementById('alreadyExists').style.display = "block"
+				}
+			}
+		};
+		xhttp.open("GET", "/addMusic/"+idMusic+"/"+idAlbum, true);
+		xhttp.send();
+	}
+	function like(id)
+	{
+		var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+		$("#"+id).hide();
+		$("#unlike"+splitID[1]).show();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					location.href = "/login?page="+location.href;
+				}
+			}
+		};
+		xhttp.open("GET", "/LikeMusic/"+splitID[1], true);
+		xhttp.send();
+	}
+	function unLike(id)
+	{
+		var splitID = id.match(/[a-z]+|[^a-z]+/gi);
+		$("#"+id).hide();
+		$("#like"+splitID[1]).show();
+		var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				if(this.responseText == "Login")
+				{
+					location.href = "/login?page="+location.href;
+				}
+			}
+		};
+		xhttp.open("GET", "/LikeMusic/"+splitID[1], true);
+		xhttp.send();
+	}
+	function loadMusic(id){
+		NameMusic = document.getElementById('Name'+id).innerHTML;
+		var NameMusic = NameMusic.split(":");
+		document.getElementById("NameMusic").innerHTML = NameMusic[1];
+		document.getElementById('playMusic').src = "/media/"+id;
+		document.getElementById('audio').src = "/media/"+id;
+		var audio = document.getElementById('music');
+		audio.load();
+		audio.play();
+		playButton.style.visibility = "hidden";
+		pause.style.visibility = "visible";
+	}
+</script>
+</html>

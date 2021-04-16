@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+	{% load static %}
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+	<!-- jQuery library -->
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+	<!-- Popper JS -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+
+	<!-- Latest compiled JavaScript -->
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title></title>
+	<style>
+		html { 
+			background: url({% static 'image/login/music-background.jpg' %}) no-repeat center center fixed; 
+			-webkit-background-size: cover;
+			-moz-background-size: cover;
+			-o-background-size: cover;
+			background-size: cover;
+		}
+		body{
+			background-color: transparent;	
+			width: 100%;
+		}
+		.loginForm
+		{
+			margin-top: 300px; 
+			color: #2c3e50;
+		}
+		@media only screen and (max-width: 1200px) {
+			.loginForm
+			{
+				margin-top: 200px; 
+				color: #2c3e50;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="container-xl">
+		<div class="row">
+			<div class="col-xl-4 col-12"></div>
+			<div class="col-xl-4 col-12">
+				<div class="row loginForm">
+					<div class="col-12" style="text-align: center;">
+						<h1>Log In</h1>
+						<span>Don't have an account? </span><span><a href="" title="">Sign Up</a></span>
+					</div>
+					<div class="col-12">
+						<form action="/?page={{page}}" method="post">
+							{% csrf_token %}
+							<input type="text" name="page" id="page" style="display: none;" value="{{page}}">
+							<label class="form-label">User Name</label>
+							<input type="text" name="username" class="form-control" aria-describedby="passwordHelpBlock">
+							<label class="form-label">Password</label>
+							<input type="password" class="form-control" aria-describedby="passwordHelpBlock" name="password">
+							<p style="color: red;">{{error}}</p>
+							<div style="width: 100%; text-align: center; margin-top: 10px;">
+								<button type="submit" class="btn btn-primary">Submit</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-xl-4 col-12"></div>
+		</div>
+	</div>
+</body>
+</html>
