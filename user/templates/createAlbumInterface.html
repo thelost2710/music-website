@@ -30,7 +30,7 @@
 </head>
 <body>
 	{% include toolbar %}
-	{% include "Search.html" %}
+	{% include "search.html" %}
 	<form action="/createAlbum" method="POST" accept-charset="utf-8" enctype="multipart/form-data">
 		{% csrf_token %}
 		<div class="container-xl">
