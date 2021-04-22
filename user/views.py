@@ -14,6 +14,9 @@ from django.core.files.base import ContentFile
 def login(request):
 	page = request.GET.get("page")
 	return render(request, 'login.html', {"page":page})
+def signUpPage(request):
+	page = request.GET.get("page")
+	return render(request, 'Sign up.html', {"page":page})
 def index(request):
 	if request.user.is_authenticated:
 		return render(request, 'index.html', DataIndexUser())
@@ -75,17 +78,17 @@ def ViewAlbum(request):
 		album = Album.objects.filter(Public = True)
 		rate_album = Rate_album.objects.filter(UserID = request.user.id, isLike = True)
 		AllAlbum = {'album' : album,'rate_album':rate_album, 'toolbar' : 'user/toolbarUser.html', 'title':'All album'}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 	else:
 		album = Album.objects.filter(UserID_id = None)
 		AllAlbum = {'album' : album, 'yourAlbum':request.user.id, 'toolbar' : 'toolbar.html', 'title':'All album'}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 def YourAlbum(request):
 	if request.user.is_authenticated:
 		album = Album.objects.filter(UserID_id = request.user.id)
 		rate_album = Rate_album.objects.filter(UserID = request.user.id, isLike = True)
 		AllAlbum = {'album' : album, 'rate_album':rate_album, 'toolbar' : 'user/toolbarUser.html', 'title':'Your Album'}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 	else:
 		page = request.GET.get("page")
 		return render(request, 'login.html', {"page":page})
@@ -94,21 +97,21 @@ def ViewHotAlbum(request):
 		album = Album.objects.filter(UserID_id = None).order_by(F('Like').desc())[:10]
 		rate_album = Rate_album.objects.filter(UserID = request.user.id, isLike = True)
 		AllAlbum = {'album' : album, 'toolbar' : 'user/toolbarUser.html', 'title':'Hot album', 'rate_album':rate_album}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 	else:
 		album = Album.objects.filter(UserID_id = None).order_by(F('Like').desc())[:10]
 		AllAlbum = {'album' : album, 'toolbar' : 'toolbar.html', 'title':'Hot album'}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 def NewAlbum(request):
 	if request.user.is_authenticated:
 		album = Album.objects.filter(UserID_id = None).order_by(F('id').asc())[:10]
 		rate_album = Rate_album.objects.filter(UserID = request.user.id, isLike = True)
 		AllAlbum = {'album' : album, 'toolbar' : 'user/toolbarUser.html', 'title':'New album', 'rate_album':rate_album}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 	else:
 		album = Album.objects.filter(UserID_id = None).order_by(F('id').asc())[:10]
 		AllAlbum = {'album' : album, 'toolbar' : 'toolbar.html', 'title':'New album'}
-		return render(request, 'Album.html', AllAlbum)
+		return render(request, 'album.html', AllAlbum)
 def ViewCart(request):
 	if request.user.is_authenticated:
 		album = []

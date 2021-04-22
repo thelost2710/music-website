@@ -36,6 +36,7 @@ urlpatterns = [
     path('ViewProfile', views.ViewProfile),
     path('saveInformation', views.saveInformation),
     path('search', views.search),
+    path('signUpPage', views.signUpPage),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
